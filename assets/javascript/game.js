@@ -1,63 +1,138 @@
-$( document ).ready(function(){
-	var answer;
-	var crystal1;
-	var crystal2;
-	var crystal3;
-	var crystal4;
-	var wins = 0;
-	var losses = 0;
-	var guess = 0;
+var trivia = [{
+	question: "How many different sounds can a cat make?",
+    answers: ["100", "5", "15", "3"],
+    correctAnswer: 0 
+    },{
+    question: "Why how long do cats sleep in a day?",
+    answers: ["9-13 hours", "12-16 hours", "6-12 hours",
+                      "14-18 hours"],
+    correctAnswer: 1 
+    },{ 
+    question: "Who was the Egyptian goddess of cats?",
+    answers: ["Li Shou", "Hecate", "Bastet", "Sekhmet"],
+    correctAnswer: 2 
+    },{ 
+    question: "What is a group of kittens called?",
+    answers: ["Litter", "Pride", "Pack", "Kindle"],
+    correctAnswer: 3 
+    },{
+    question: "Do cats have more bones than humans?",
+    answers: ["Yes", "No", "I dont know"],
+    correctAnswer: 0 
+    },{ 
+    question: "How many species have cats help drive to extinction?",
+    answers: ["33", "10", "0", "47"],
+    correctAnswer: 0 
+    }];
+var currentQuestion; 
+var correctAnswer;
+var incorrectAnswer; 
+var unanswered; 
+var seconds; 
+var time; 
+var answered; 
+var userSelect;
+var messages = {
+	endTime: "Out of time!",
+	finished: "Meow!"
+}
 
-	function check() {
-		if(guess === answer){
-			wins++;
-			reset();
-		}
-		else if(guess > answer) {
-			losses++;
-			reset();
-		}
+$("#startBtn").on('click', function(){
+	$(this).hide();
+	newGame();
+});
+
+$("#startOverBtn").on("click", function(){
+	$(this).hide();
+	newGame();
+});
+
+function newGame(){
+	$("#finalMessage").empty();
+	$("#correct").empty();
+	$("#incorrect").empty();
+	$("#unanswered").empty();
+	currentQuestion = 0;
+	correctAnswer = 0;
+	incorrectAnswer = 0;
+	unanswered = 0;
+	newQuestion();
+}
+
+function newQuestion(){
+	$("#message").empty();
+	$("#correctedAnswer").empty();
+	answered = true;
+	var current = trivia[currentQuestion]
+	//sets up new questions & answerList
+	$(".question").html("<h2>" + current.question + "</h2>");
+	for(var i = 0; i < 4; i++){
+		var choices = $("<div>");
+		choices.text(current.answers[i]);
+		choices.attr({"data-index": i });
+		choices.addClass("thisChoice");
+		$(".answerList").append(choices);
+	}
+	countdown();
+	
+	$(".thisChoice").on("click",function(){
+		userSelect = $(this).data("index");
+		clearInterval(time);
+		answerPage();
+	});
+}
+
+function countdown(){
+	seconds = 15;
+	$("#timeLeft").html("<h3>Time Remaining: " + seconds + "</h3>");
+	answered = true;
+	time = setInterval(showCountdown, 1000);
+}
+
+function showCountdown(){
+	seconds--;
+	$("#timeLeft").html("<h3>Time Remaining: " + seconds + "</h3>");
+	if(seconds < 1){
+		clearInterval(time);
+		answered = false;
+		answerPage();
+	}
+}
+
+function answerPage(){
+	//clears question
+	$(".thisChoice").empty();
+	$(".question").empty();
+
+	var current = trivia[currentQuestion];
+	var rightAnswerIndex = current.correctAnswer;
+	//checks to see correct, incorrect, or unanswered
+	if(userSelect === rightAnswerIndex && answered === true){
+		correctAnswer++;
+	} else if(userSelect != rightAnswerIndex && answered === true){
+		incorrectAnswer++;
+	} else{
+		unanswered++;
+		$("#message").html(messages.endTime);
+		answered = true;
 	}
 	
-	function reset() {
-		crystal1 = randomValue();
-		crystal2 = randomValue();
-		crystal3 = randomValue();
-		crystal4 = randomValue();
-		newAnswer();
-		guess = 0;
-		update();
-	}
+	if(currentQuestion === trivia.length - 1){
+		setTimeout(scoreboard, 0)
+	} else{
+		currentQuestion++;
+		setTimeout(newQuestion, 0);
+	}	
+}
 
-	function newAnswer() {
-		answer = Math.floor(Math.random() * 101) + 19;
-		$("#answer").text(answer);
-	}
-
-	function randomValue() {
-		return Math.floor(Math.random() * 11) + 1;
-	}
-
-	function update() {
-		$("#guess").text(guess);
-		$("#wins").text("Wins: " + wins);
-		$("#losses").text("losses: " + losses);
-	}
-
-	reset();
-
-	$(".crystal").on("click", function() {
-		switch (this.id) {
-			case "button-1": guess = guess + crystal1;
-				break;
-			case "button-2": guess = guess + crystal2;
-				break;
-			case "button-3": guess = guess + crystal3;
-				break;
-			case "button-4": guess = guess + crystal4;
-				break;
-		}
-		check();
-		update();
-	});
-});
+function scoreboard(){
+	$("#timeLeft").empty();
+	$("#message").empty();
+	$("#finalMessage").html(messages.finished);
+	$("#correct").html("Correct Answers: " + correctAnswer);
+	$("#incorrect").html("Incorrect Answers: " + incorrectAnswer);
+	$("#unanswered").html("Unanswered: " + unanswered);
+	$("#startOverBtn").addClass("reset");
+	$("#startOverBtn").show();
+	$("#startOverBtn").html("Again?");
+}

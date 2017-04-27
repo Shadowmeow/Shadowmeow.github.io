@@ -1,0 +1,31 @@
+.resize {
+	width: 100px;
+	height: 100px;
+}
+
+.text-center {
+	font-size: 75px;
+}
+
+.container {
+	max-width: 100%;
+	margin: auto;
+	text-align: center;
+	font-size: 25px;
+}
+
+#answer {
+	font-size: 50px;
+}
+
+#wins {
+	font-size: 25px;
+}
+
+#losses {
+	font-size: 25px;
+}
+
+#guess {
+	font-size: 50px;
+}
