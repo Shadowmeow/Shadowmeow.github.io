@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Gif Search</title>
+</head>
+	<link rel="stylesheet" type="text/css" href="assets/css/style.css">
+
+<body>
+	<div class="flex-container">
+	    <div id="header">Gif Searcher</div>
+
+	    <div class="row" id="buttons"></div>
+
+	    <div class="row">
+	      <div class="col-sm-12">
+	        <div class="panel panel-primary">
+	          <div class="panel-heading">
+	            <h3 class="panel-title">Search Gifs</h3>
+	          </div>
+	        </div>
+	      </div>
+
+		<div class="row">
+		  <div class="col-md-11">
+		    <form role="form" id="form">
+		      <div class="form-group">
+		        <label for="search">Search Term:</label>
+		        <input type="text" class="form-control" id="search-term">
+		      </div>
+	          <button type="submit" class="btn btn-default" id="run-search">Search</button>
+		    </form>
+		    <div class="col-md-1">
+	   	    <div id="display"></div>
+	      </div>
+		</div>
+
+  	<script src="http://code.jquery.com/jquery-2.1.3.min.js"></script>
+  	<script src="assets/javascript/logic.js"></script>
+</body>
+</html>

@@ -1,32 +1,31 @@
-.container {
+* {
 	text-align: center;
-	font-size: 40px;
-	font-style: bold;
-	position: fixed;
-  	top: 50%;
-  	left: 50%;
-  	transform: translate(-50%, -50%);
+	background-color: #ADD8E6;
 }
 
-#startBtn {
-	font-size: 30px;
-	width: 200px;
-	height: 100px;
-	margin: auto;
+button {
+	background-color: #C0C0C0;
+	padding: 20px, 30px;
+	font-size: 20px;
 }
 
-.score {
-	text-align: center;
-	font-size: 50px;
-	position: fixed;
-  	top: 50%;
-  	left: 50%;
-  	transform: translate(-50%, -50%);
-	background-image: url(../images/catHead.jpeg);
-	background-size: 100%;
-	color: pink;
-} 
+#header {
+	font-size: 90px;
+}
 
-body{
-	background-image: url(../images/background.jpg);
+#gifs {
+	margin-left: 10px;
+	display: inline-block;
+}
+
+h3 {
+	font-size: 35px;
+}
+
+.btn-default {
+	margin-top: 10px;
+}
+
+#search-term {
+	background-color: white;
 }
