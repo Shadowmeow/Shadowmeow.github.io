@@ -1,2 +1,2 @@
-# week-4-game
-Game
+# GiphySearch
+Program to search for a max of ten gifs from gifhy
