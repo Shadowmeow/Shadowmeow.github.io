@@ -1,76 +1,71 @@
-var startingButtons = ["Kitten", "Puppy", "Panda", "Bunny",
-  "Chinchilla"];
+$(document).ready(function(){
+	var config = {
+    apiKey: "AIzaSyB_Y0UChYLmzDYDOfebKJ7CJi_NGEYqDQc",
+    authDomain: "practice-app-a32d1.firebaseapp.com",
+    databaseURL: "https://practice-app-a32d1.firebaseio.com",
+    projectId: "practice-app-a32d1",
+    storageBucket: "practice-app-a32d1.appspot.com",
+    messagingSenderId: "288062333834"
+  };
 
-function makeButton(search){
-  var button = $("<button type='button'>" + search + "</button>")
-      .addClass("btn btn-warning").attr("data",search);
-  $("#buttons").append(button);
-}
+  firebase.initializeApp(config);
 
-$("#buttons").on("click", ".btn", function(){
-  //empty gifs so no gifs overlap
-  $("#display").empty();
+  var database = firebase.database();
 
-  var selected = $(this).attr("data");
-  var queryURL = "https://api.giphy.com/v1/gifs/search?q=" +
-    selected + "&api_key=dc6zaTOxFJmzC&limit=10";
+  var frequency;
 
-  $.ajax({
-    url: queryURL,
-    method: "GET" 
-  }).done(function(response){
-      console.log(response);
-      var result = response.data;
-      for (var i = 0; i < result.length; i++) {
-        var gifDiv = $("<div id='gifs'>");
-        var p = $("<p>").text("Rating: " + result[i].rating);
-        var topicImage = $("<img>");
-        var imageLocation = result[i].images;
-        //assign attributes to image div
-        topicImage.attr("src", imageLocation.fixed_height_still.url);
-        topicImage.attr("data-still", imageLocation.fixed_height_still.url);
-        topicImage.attr("data-animate", imageLocation.fixed_height.url)
-        topicImage.attr("data-state", "still")
-        topicImage.addClass("gif");
+	$("#add-train").on("click", function(){
 
-        gifDiv.append(p);     
-        gifDiv.append(topicImage);
-            
-        $("#display").prepend(gifDiv);
-      }
-    })
-  });
+		var train = $("#name-input").val().trim();
+		var destination = $("#train-input").val().trim();
+		var arrivalTime = $("#arrival-input").val().trim();
+		var trainNumber = $("#number-input").val();
+	  frequency = $('#frequency-input').val();
+	  console.log(train);
 
-$("#display").on("click", ".gif", function(event){
-  event.preventDefault();
-  // gets the current state of the clicked gif 
-  var state = $(this).data("state");
-  
-  // toggle gif between animate and still
-  if (state === "still") {
-    $(this).attr("src", $(this).attr("data-animate"));
-    $(this).data("state", "animate");
-  } 
-  else if(state === "animate") {
-    $(this).attr("src", $(this).attr("data-still"));
-    $(this).data("state", "still");
-  }
-})
+    database.ref().push({
+   		name: train,
+   		destination: destination,
+     	firstTrainTime: arrivalTime, 
+     	frequency: frequency,
+      timeAdded: firebase.database.ServerValue.TIMESTAMP
+    });
+     	// Clear inputs
+      $(".form-control").empty();
+	});
 
-$("#run-search").on("click", function(event){
-  event.preventDefault();
-  var term = $("#search-term").val().trim();
-  if(term === "") {
-    console.log("invalid search term");
-  }
-  else {
-    // make new button
-    makeButton(term);
-    document.getElementById("form").reset();
-  }
+	$("#empty-all").on("click", function(){
+
+	})
+
+  database.ref().on("child_added", function(snapshot) {
+		$("#trainName").append(snapshot.val().name + "<br>");
+		$("#destination").append(snapshot.val().destination + "<br>");
+		$("#frequency").append(snapshot.val().frequency + " minutes <br>");
+		$("#arrivalTime").append(snapshot.val().firstTrainTime + "<br>");
+		$("#timeToArrival").append(frequencyChecker(snapshot.val().firstTrainTime,
+				snapshot.val().frequency) + " minutes <br>");
+		// Handle the errors
+		}, function(errorObject){
+	});
+  //Find the time left before next train arrives
+	function findTimeLeft(arrival) {
+		var currentTime = moment().format("HH:mm");
+		console.log(currentTime);
+		var trainTime = arrival;
+		console.log(trainTime);
+		var difference = moment(trainTime, "HH:mm")
+			.diff(moment(currentTime, "HH:mm"), "minutes");
+		console.log(difference);
+		return difference;
+	}
+
+	function frequencyChecker(check, frequency) {
+		var checkTime = findTimeLeft(check);
+		var change = parseInt(frequency);
+		while(checkTime < 0) {
+			checkTime = change + checkTime;
+		}
+		return checkTime;
+	}
 });
-
-//make startingButtons on page opening
-for(i = 0; i < startingButtons.length; i++) {
-     makeButton(startingButtons[i]);
-};

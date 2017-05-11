@@ -1,31 +1,17 @@
-* {
+.jumbotron {
 	text-align: center;
-	background-color: #ADD8E6;
+	background-color: #9999ff;
 }
 
-button {
-	background-color: #C0C0C0;
-	padding: 20px, 30px;
-	font-size: 20px;
+#input-area {
+	text-align: center;
+	margin-top: 100px;
 }
 
-#header {
-	font-size: 90px;
+.form-control {
+	text-align: center;
 }
 
-#gifs {
-	margin-left: 10px;
-	display: inline-block;
-}
-
-h3 {
-	font-size: 35px;
-}
-
-.btn-default {
-	margin-top: 10px;
-}
-
-#search-term {
-	background-color: white;
+.col-md-2 {
+	text-align: center;
 }
