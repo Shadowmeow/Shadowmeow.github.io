@@ -42,7 +42,7 @@ p:last-child {
 h1, h2, h3 {
   font-family: Georgia, Times, "Times New Roman", serif;
   font-weight: 700;
-  color: #4aaaa5;
+  color: #bedff6;
 }
 
 h1 {
@@ -200,7 +200,7 @@ main {
   padding: 15px;
   margin-bottom: 0;
   font-weight: 300;
-  line-height: 30px;
+  line-height: 10px;
   color: #fff;
   text-align: center;
   background: #4aaaa5;
